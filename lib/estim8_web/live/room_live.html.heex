@@ -7,8 +7,8 @@
   </.header>
   <div class="flex flex-row grow">
     <!-- User list -->
-    <div class="flex flex-col w-1/4 xl:w-1/5 hidden lg:block">
-      <%= for {_, user} <- @users do %>
+    <div class="flex flex-col w-1/5 xl:w-1/5 hidden lg:block">
+      <%= for {_, user} <- Enum.reverse(@users) do %>
         <.user_plaque user={user}/>
       <% end %>
     </div>
@@ -17,16 +17,15 @@
     <div class="flex flex-col grow">
 
       <!-- Table -->
-      <div
-        class={"py-2 h-2/3 grid items-center xl:grid-cols-#{min(@num_non_empty_estimations, 7)} lg:grid-cols-#{min(@num_non_empty_estimations, 5)} sm:grid-cols-#{min(@num_non_empty_estimations, 4)} grid-cols-#{min(@num_non_empty_estimations, 3)} gap-4 mx-auto"}>
+      <div class="py-2 min-h-[22rem] flex flex-row grow justify-center content-center flex-wrap">
         <%= for {_, user} <- @users do %>
           <%= if user.card != nil do %>
             <%= if user.id == @me.id do %>
-              <.own_card name={user.name} value={user.card.label} style={if @stage == :estimation, do: :hint, else: :show} />
+              <.own_card name={user.name} label={user.card.label} style={if @stage == :estimation, do: :hint, else: :show} />
             <% else %>
             <.card
               name={user.name}
-              value={user.label}
+              label={user.card.label}
               style={ if @stage == :estimation, do: :hide, else: :show } />
             <% end %>
           <% end %>
@@ -36,7 +35,7 @@
 
       <%= if @stage == :estimation do %>
       <!-- Hand -->
-      <div class="py-2 grid place-items-center gap-2 2xl:grid-cols-12 xl:grid-cols-10 lg:grid-cols-6 md:grid-cols-7 sm:grid-cols-6 grid-cols-3 grow">
+      <div class="py2 flex flex-row justify-center content-center grow flex-wrap">
         <%= for {card, index} <- Enum.with_index(@deck.cards) do %>
           <.handcard label={card.label} phx-click="put_card" phx-value-card-id={index} />
         <% end %>

@@ -11,14 +11,18 @@ defmodule Estim8Web.Components do
           @user.card != nil -> "bg-green-50"
         end
     }"}>
-      <%= @user.name %>
+      <div class="truncate">
+        <%= @user.name %>
+      </div>
+      <div class="h-6 w-6">
       <%= if @user.observer do %>
-        <.hicon name="hero-eye" class="h-6 w-6 text-indigo-500" />
+        <.hicon name="hero-eye" class="h-6 w-6 text-indigo-500 items-center" />
       <% else %>
         <%= if @user.card do %>
-          <.hicon name="hero-check-circle" class="h-6 w-6 text-lime-700" />
+          <.hicon name="hero-check-circle" class="h-6 w-6 text-lime-700 items-center" />
         <% end %>
       <% end %>
+      </div>
     </div>
     """
   end
@@ -30,12 +34,12 @@ defmodule Estim8Web.Components do
       <.card name="Player" value={3} style={hide} />
   """
   attr :name, :string, default: ""
-  attr :value, :string, default: ""
+  attr :label, :string, default: ""
   attr :style, :atom, default: :hide
   attr :rest, :global, include: ~w(disabled form name value)
   def card(assigns) do
     ~H"""
-    <div class="w-32 h-48 bg-sky-900 text-afwhite font-bold flex flex-col rounded"
+    <div class="w-32 h-48 m-1 bg-sky-900 text-afwhite font-bold flex flex-col rounded"
       {@rest}
     >
       <%= if @name != nil do %>
@@ -44,11 +48,13 @@ defmodule Estim8Web.Components do
       <div class={"flex grow justify-center items-center #{if @style == :hint, do: "text-cgray", else: ""}"}>
         <span style={"font-size: #{
           cond do
-            @value < 10 -> 80
-            @value < 100 -> 60
-            true -> 40
+            String.length(@label) <= 1 -> 80
+            String.length(@label) == 2 -> 60
+            String.length(@label) == 3 -> 40
+            String.length(@label) == 4 -> 30
+            true -> 10
           end
-        }pt"}><%= if @style == :hide, do: " ", else: @value %></span>
+        }pt"}><%= if @style == :hide, do: " ", else: @label %></span>
       </div>
     </div>
     """
@@ -60,7 +66,7 @@ defmodule Estim8Web.Components do
       class="cursor-pointer"
       phx-click="take_card"
     >
-      <.card value={@value} name={@name} style={@style}/>
+      <.card label={@label} name={@name} style={@style}/>
     </div>
     """
   end
@@ -74,11 +80,18 @@ defmodule Estim8Web.Components do
   def handcard(assigns) do
     ~H"""
     <div
-      class="w-24 h-32 bg-cgray text-afwhite font-bold flex flex-col rounded hover:bg-brand hover:cursor-pointer"
+      class="w-24 mx-1 my-1 h-32 bg-cgray text-afwhite font-bold flex flex-col rounded hover:bg-brand hover:cursor-pointer"
       {@rest}
     >
       <div class="flex grow justify-center items-center">
-        <span style={"font-size: #{String.length(@label) <= 2 && 50 || 40}pt"}><%= @label %></span>
+        <span style={"font-size: #{
+          cond do
+            String.length(@label) <= 2 -> 50
+            String.length(@label) == 3 -> 35
+            String.length(@label) == 4 -> 20
+            true -> 10
+          end
+        }pt"}><%= @label %></span>
       </div>
     </div>
     """

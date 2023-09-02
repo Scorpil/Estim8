@@ -79,7 +79,7 @@ defmodule Estim8.Room do
 
   def _calculate_stats(state) do
     non_empty_estimates = state.users
-      |> Enum.map(fn {_, user} -> user.card.value end)
+      |> Enum.map(fn {_, user} -> user.card && user.card.value end)
       |> Enum.filter(fn value -> is_number(value) end)
     num_non_empty_estimates = Enum.count(non_empty_estimates)
     if num_non_empty_estimates == 0 do
