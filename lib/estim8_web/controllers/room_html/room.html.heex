@@ -1,0 +1,60 @@
+<div class="flex flex-row grow">
+  <!-- User list -->
+  <div class="flex flex-col w-1/4 xl:w-1/5 hidden lg:block">
+    <%= for user <- @users do %>
+      <.user_plaque name={user[:name]}/>
+    <% end %>
+  </div>
+  <!-- /User list -->
+
+  <div class="flex flex-col grow">
+
+    <!-- Table -->
+    <div
+      class={"py-2 h-2/3 grid items-center xl:grid-cols-#{min(@num_non_empty_estimations, 7)} lg:grid-cols-#{min(@num_non_empty_estimations, 5)} sm:grid-cols-#{min(@num_non_empty_estimations, 4)} grid-cols-#{min(@num_non_empty_estimations, 3)} gap-4 mx-auto"}>
+      <%= for {user, estimation} <- Enum.zip(@users, @estimations) do %>
+        <%= if estimation != nil do %>
+          <.card name={user[:name]} value={estimation} show={@stage == :results} />
+        <% end %>
+      <% end %>
+    </div>
+    <!-- /Table -->
+
+    <%= if @stage == :estimation do %>
+    <!-- Hand -->
+    <div class="py-2 grid place-items-center gap-2 2xl:grid-cols-12 xl:grid-cols-10 lg:grid-cols-6 md:grid-cols-7 sm:grid-cols-6 grid-cols-3 grow">
+      <.handcard value="?" />
+      <.handcard value="0" />
+      <.handcard value="1" />
+      <.handcard value="2" />
+      <.handcard value="3" />
+      <.handcard value="5" />
+      <.handcard value="8" />
+      <.handcard value="13" />
+      <.handcard value="20" />
+      <.handcard value="40" />
+      <.handcard value="60" />
+        <.handcard value="100" />
+    </div>
+    <!-- Hand -->
+    <% else %>
+    <!-- Results -->
+      <div class="flex flex-row w-full justify-around py-2 grow">
+        <.stat name="Average" value={:io_lib.format("~.1f", [@stats.mean])} />
+        <.stat name="Median" value={@stats.median} />
+      </div>
+    <!-- /Results -->
+    <% end %>
+
+    <div class="py-2 flex flex-row justify-between">
+      <.button_secondary>Observer</.button_secondary>
+      <div>
+        <%= if @stage == :estimation do %>
+          <.button>Reveal</.button>
+        <% else %>
+          <.button>Next Round</.button>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

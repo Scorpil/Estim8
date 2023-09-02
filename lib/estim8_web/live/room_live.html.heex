@@ -1,0 +1,70 @@
+<div class="flex flex-col grow">
+  <.header>
+    <form id="name" phx-change="namechange" phx-submit="namechange" class="flex flex-row items-center">
+      <label for="nameinput" class="text-gray-500 text-sm pr-1 hidden md:block">Your name: </label>
+      <input id="nameinput" name="name" class="h-8" type="text" placeholder="Name" value={@me.name} phx-debounce="2000"/>
+    </form>
+  </.header>
+  <div class="flex flex-row grow">
+    <!-- User list -->
+    <div class="flex flex-col w-1/4 xl:w-1/5 hidden lg:block">
+      <%= for {_, user} <- @users do %>
+        <.user_plaque user={user}/>
+      <% end %>
+    </div>
+    <!-- /User list -->
+
+    <div class="flex flex-col grow">
+
+      <!-- Table -->
+      <div
+        class={"py-2 h-2/3 grid items-center xl:grid-cols-#{min(@num_non_empty_estimations, 7)} lg:grid-cols-#{min(@num_non_empty_estimations, 5)} sm:grid-cols-#{min(@num_non_empty_estimations, 4)} grid-cols-#{min(@num_non_empty_estimations, 3)} gap-4 mx-auto"}>
+        <%= for {_, user} <- @users do %>
+          <%= if user.card != nil do %>
+            <%= if user.id == @me.id do %>
+              <.own_card name={user.name} value={user.card.label} style={if @stage == :estimation, do: :hint, else: :show} />
+            <% else %>
+            <.card
+              name={user.name}
+              value={user.label}
+              style={ if @stage == :estimation, do: :hide, else: :show } />
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+      <!-- /Table -->
+
+      <%= if @stage == :estimation do %>
+      <!-- Hand -->
+      <div class="py-2 grid place-items-center gap-2 2xl:grid-cols-12 xl:grid-cols-10 lg:grid-cols-6 md:grid-cols-7 sm:grid-cols-6 grid-cols-3 grow">
+        <%= for {card, index} <- Enum.with_index(@deck.cards) do %>
+          <.handcard label={card.label} phx-click="put_card" phx-value-card-id={index} />
+        <% end %>
+      </div>
+      <!-- Hand -->
+      <% else %>
+      <!-- Results -->
+        <div class="flex flex-row w-full justify-around py-2 grow">
+          <.stat name="Average" value={if @stats.mean != nil do :io_lib.format("~.1f", [@stats.mean]) else nil end} />
+          <.stat name="Median" value={@stats.median} />
+        </div>
+      <!-- /Results -->
+      <% end %>
+
+      <div class="py-2 flex flex-row justify-between">
+        <%= if @me.observer do %>
+          <.button_secondary phx-click="set_observer" phx-value-observer="false">Become player</.button_secondary>
+        <% else %>
+          <.button_secondary phx-click="set_observer" phx-value-observer="true">Become observer</.button_secondary>
+        <% end %>
+        <div>
+          <%= if @stage == :estimation do %>
+            <.button phx-click="reveal" disabled={@num_non_empty_estimations==0}>Reveal</.button>
+          <% else %>
+            <.button phx-click="reset">Next Round</.button>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

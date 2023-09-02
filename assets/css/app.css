@@ -1,0 +1,10 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat:500');
+
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+/* This file is for your main application CSS */

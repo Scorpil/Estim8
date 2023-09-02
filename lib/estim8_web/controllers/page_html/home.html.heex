@@ -1,0 +1,15 @@
+<.flash_group flash={@flash} />
+<.header></.header>
+<div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-32 lg:px-12">
+  <h1 class="lg:text-4xl md:text-3xl text-2xl">Estimate your tickets like a pro.</h1>
+</div>
+
+<div class="mx-auto text-center">
+  <a
+    class="px-3 py-3 rounded-none bg-brand text-afwhite font-bold"
+    phx-click="create_room"
+    href={"/room/#{@room_id}"}
+  >
+  Create a Room
+  </a>
+</div>
