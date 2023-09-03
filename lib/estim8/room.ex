@@ -51,7 +51,7 @@ defmodule Estim8.Room do
   def new(room_id) do
     %{
       room_id: room_id,
-      settings: %{:name => "", :deck_id => nil},
+      settings: %{:name => "", :deck_id => "simple"},
       stage: :estimation,
       users: %{},
       num_non_empty_estimations: 0,
