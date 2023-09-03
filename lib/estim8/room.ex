@@ -7,7 +7,6 @@ defmodule Estim8.RoomRegistry do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
 
-  @spec join_or_create_and_join(any, any) :: any
   def join_or_create_and_join(room_id, user) do
     GenServer.call(__MODULE__, {:join_or_create_and_join, room_id, user})
   end
@@ -52,6 +51,7 @@ defmodule Estim8.Room do
   def new(room_id) do
     %{
       room_id: room_id,
+      settings: %{:name => "", :deck_id => nil},
       stage: :estimation,
       users: %{},
       num_non_empty_estimations: 0,
@@ -147,6 +147,13 @@ defmodule Estim8.Room do
     if value == true do
       _set_estimate(room, user_id, nil)
     end
+    broadcast(room)
+  end
+
+  def update_settings(room, settings) do
+    Agent.update(room, fn (state) ->
+      Map.update!(state, :settings, fn (_) -> settings end)
+    end)
     broadcast(room)
   end
 

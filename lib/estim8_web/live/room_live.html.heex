@@ -1,3 +1,17 @@
+<.modal id="settings" show={false}>
+  <.simple_form for={@settings_form} phx-submit="settings">
+    <.input field={@settings_form[:name]} placeholder="Room name" label="Room name"/>
+    <.input field={@settings_form[:deck_id]} placeholder="Deck" label="Deck" type="select" options={
+      for deck <- Estim8.Deck.list() |> Enum.map(fn {_, deck} -> deck end) |> Enum.sort(&(&1.n <= &2.n)) do
+        {deck.name, deck.id}
+      end
+    } value={@deck.id} />
+    <:actions>
+      <.button phx-click={hide_modal("settings")}>Save</.button>
+    </:actions>
+  </.simple_form>
+</.modal>
+
 <div class="flex flex-col grow">
   <.header>
     <form id="name" phx-change="namechange" phx-submit="namechange" class="flex flex-row items-center">
@@ -5,6 +19,7 @@
       <input id="nameinput" name="name" class="h-8" type="text" placeholder="Name" value={@me.name} phx-debounce="2000"/>
     </form>
   </.header>
+  <div class="text-xl font-bold text-center w-full"><%= @settings.name %></div>
   <div class="flex flex-row grow">
     <!-- User list -->
     <div class="flex flex-col w-1/5 xl:w-1/5 hidden lg:block">
@@ -35,7 +50,7 @@
 
       <%= if @stage == :estimation do %>
       <!-- Hand -->
-      <div class="py2 flex flex-row justify-center content-center grow flex-wrap">
+      <div class="py2 flex flex-row justify-center content-center flex-wrap">
         <%= for {card, index} <- Enum.with_index(@deck.cards) do %>
           <.handcard label={card.label} phx-click="put_card" phx-value-card-id={index} />
         <% end %>
@@ -51,11 +66,14 @@
       <% end %>
 
       <div class="py-2 flex flex-row justify-between">
+        <div>
+        <.button_secondary phx-click={show_modal("settings")}><.hicon name="hero-cog-6-tooth"/> </.button_secondary>
         <%= if @me.observer do %>
-          <.button_secondary phx-click="set_observer" phx-value-observer="false">Become player</.button_secondary>
+          <.button_secondary phx-click="set_observer" phx-value-observer="false"><.hicon name="hero-eye-slash"/></.button_secondary>
         <% else %>
-          <.button_secondary phx-click="set_observer" phx-value-observer="true">Become observer</.button_secondary>
+          <.button_secondary phx-click="set_observer" phx-value-observer="true"><.hicon name="hero-eye"/></.button_secondary>
         <% end %>
+        </div>
         <div>
           <%= if @stage == :estimation do %>
             <.button phx-click="reveal" disabled={@num_non_empty_estimations==0}>Reveal</.button>
