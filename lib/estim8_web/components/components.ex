@@ -77,11 +77,12 @@ defmodule Estim8Web.Components do
   Renders a card in a hand.
   """
   attr :label, :string
+  attr :class, :string, default: ""
   attr :rest, :global, include: ~w(disabled form name value)
   def handcard(assigns) do
     ~H"""
     <button
-      class="w-24 mx-1 my-1 h-32 bg-cgray text-afwhite font-bold flex flex-col rounded hover:bg-brand hover:cursor-pointer"
+      class={"flex items-center w-24 mx-1 my-1 h-32 bg-cgray text-afwhite font-bold flex flex-col rounded hover:bg-brand hover:cursor-pointer #{@class}"}
       {@rest}
     >
       <div class="flex grow justify-center items-center">

@@ -32,7 +32,7 @@
     <div class="flex flex-col grow">
 
       <!-- Table -->
-      <div class="py-2 min-h-[22rem] flex flex-row grow justify-center content-center flex-wrap">
+      <div class="py-2 flex flex-row grow justify-center content-center flex-wrap">
         <%= for {_, user} <- @users do %>
           <%= if user.card != nil do %>
             <%= if user.id == @me.id do %>
@@ -48,20 +48,23 @@
       </div>
       <!-- /Table -->
 
-      <%= if @stage == :estimation do %>
+      <%= if true do %>
       <!-- Hand -->
-      <div class="py2 flex flex-row justify-center content-center flex-wrap">
+      <div class="py2 flex flex-row justify-center items-center flex-wrap">
         <%= for {card, index} <- Enum.with_index(@deck.cards) do %>
-          <.handcard label={card.label} phx-click="put_card" phx-value-card-id={index} />
+          <.handcard class={if @stage == :results do "invisible" else "" end} label={card.label} phx-click="put_card" phx-value-card-id={index} />
+        <% end %>
+        <%= if @stage == :results do %>
+        <div class="flex flex-row w-full justify-around py-2 absolute">
+          <.stat name="Average" value={if @stats.mean != nil do :io_lib.format("~.1f", [@stats.mean]) else nil end} />
+          <.stat name="Median" value={@stats.median} />
+        </div>
         <% end %>
       </div>
       <!-- Hand -->
       <% else %>
       <!-- Results -->
-        <div class="flex flex-row w-full justify-around py-2 grow">
-          <.stat name="Average" value={if @stats.mean != nil do :io_lib.format("~.1f", [@stats.mean]) else nil end} />
-          <.stat name="Median" value={@stats.median} />
-        </div>
+
       <!-- /Results -->
       <% end %>
 
