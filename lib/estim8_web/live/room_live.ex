@@ -4,13 +4,13 @@ defmodule Estim8Web.RoomLive do
 
   @deck_list Estim8.Deck.list()
 
-  def assign_room_data(socket, room, me) do
+  def assign_room_data(socket, room, me, status) do
     room_data = if room == nil do Estim8.Room.new(nil) else Estim8.Room.get(room) end
     assign(socket, Map.merge(
       room_data,
       %{
         room: room,
-        deck: Map.get(@deck_list, room_data.settings.deck_id, Estim8.Deck.empty()),
+        deck: if status == :connected do Map.get(@deck_list, room_data.settings.deck_id) else Estim8.Deck.empty() end,
         settings_form: to_form(Estim8.RoomSettings.changeset(%Estim8.RoomSettings{}, room_data.settings)),
         me: me
       }
@@ -30,10 +30,10 @@ defmodule Estim8Web.RoomLive do
       room = Estim8.RoomRegistry.join_or_create_and_join(room_id, me)
       Estim8.RoomMonitor.monitor(self(), __MODULE__, %{room: room, me: me})
 
-      socket = assign_room_data(socket, room, me)
+      socket = assign_room_data(socket, room, me, :connected)
       {:ok, socket}
     else
-      socket = assign_room_data(socket, nil, Estim8.User.new("", "Anonymous"))
+      socket = assign_room_data(socket, nil, Estim8.User.new("", "Anonymous"), :disconnected)
       {:ok, socket}
     end
   end

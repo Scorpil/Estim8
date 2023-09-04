@@ -15,5 +15,22 @@
     <div class="flex flex-col h-full mx-3">
       <%= @inner_content %>
     </div>
+    <script type='text/javascript'>
+    var Countly = Countly || {};
+    Countly.q = Countly.q || [];
+    Countly.app_key = '68c2dca2aeefb9fe48905951b4c1085e1e0f2d8f';
+    Countly.url = 'https://countly.scorpil.com';
+    Countly.q.push(['track_sessions']);
+    Countly.q.push(['track_pageview']);
+    Countly.q.push(['track_clicks']);
+    Countly.q.push(['track_errors']);
+    (function() {
+      var cly = document.createElement('script'); cly.type = 'text/javascript';
+      cly.async = true;
+      cly.src = 'https://countly.scorpil.com/sdk/web/countly.min.js';
+      cly.onload = function(){Countly.init()};
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(cly, s);
+    })();
+    </script>
   </body>
 </html>

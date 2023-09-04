@@ -51,7 +51,7 @@ defmodule Estim8.Room do
   def new(room_id) do
     %{
       room_id: room_id,
-      settings: %{:name => "", :deck_id => "simple"},
+      settings: %{:name => "", :deck_id => "scrum_fib"},
       stage: :estimation,
       users: %{},
       num_non_empty_estimations: 0,
@@ -151,10 +151,8 @@ defmodule Estim8.Room do
   end
 
   def update_settings(room, settings) do
-    Agent.update(room, fn (state) ->
-      Map.update!(state, :settings, fn (_) -> settings end)
-    end)
-    broadcast(room)
+    Agent.update(room, &(Map.update!(&1, :settings, fn(_) -> settings end)))
+    reset(room)
   end
 
   def _set_estimate(room, user_id, card) do
