@@ -52,10 +52,10 @@
       <!-- Hand -->
       <div class="py2 flex flex-row justify-center items-center flex-wrap">
         <%= for {card, index} <- Enum.with_index(@deck.cards) do %>
-          <.handcard class={if @stage == :results do "invisible" else "" end} label={card.label} phx-click="put_card" phx-value-card-id={index} />
+          <.handcard class={if @stage == :results do "hidden" else "" end} label={card.label} phx-click="put_card" phx-value-card-id={index} />
         <% end %>
         <%= if @stage == :results do %>
-        <div class="flex flex-row w-full justify-around py-2 absolute">
+        <div class="flex flex-row grow justify-around py-2">
           <.stat name="Average" value={if @stats.mean != nil do :io_lib.format("~.1f", [@stats.mean]) else nil end} />
           <.stat name="Median" value={@stats.median} />
         </div>
