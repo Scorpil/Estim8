@@ -56,8 +56,9 @@
         <% end %>
         <%= if @stage == :results do %>
         <div class="flex flex-row grow justify-around py-2 absolute inset-x-0">
-          <.stat name="Average" value={if @stats.mean != nil do :io_lib.format("~.1f", [@stats.mean]) else nil end} />
-          <.stat name="Median" value={if @stats.median != nil do :io_lib.format("~.1f", [@stats.median]) else nil end} />
+          <%= for stat <- @stats do %>
+            <.stat name={stat.title} value={stat.value}} />
+          <% end %>
         </div>
         <% end %>
       </div>

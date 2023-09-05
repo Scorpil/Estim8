@@ -57,10 +57,7 @@ defmodule Estim8.Room do
       stage: :estimation,
       users: %{},
       num_non_empty_estimations: 0,
-      stats: %{
-        :mean => nil,
-        :median => nil,
-      }
+      stats: []
     }
   end
 
@@ -83,27 +80,8 @@ defmodule Estim8.Room do
     non_empty_estimates = state.users
       |> Enum.map(fn {_, user} -> user.card && user.card.value end)
       |> Enum.filter(fn value -> is_number(value) end)
-    num_non_empty_estimates = Enum.count(non_empty_estimates)
-    if num_non_empty_estimates == 0 do
-      %{
-        :mean => nil,
-        :median => nil,
-      }
-    else
-
-      mean = Enum.sum(non_empty_estimates) / num_non_empty_estimates
-      median =
-      if Integer.is_odd(non_empty_estimates) do
-        Enum.at(non_empty_estimates, div(num_non_empty_estimates, 2))
-      else
-        (Enum.at(non_empty_estimates, div(num_non_empty_estimates, 2) - 1) +
-        Enum.at(non_empty_estimates, div(num_non_empty_estimates, 2))) / 2
-      end
-      %{
-        :mean => mean,
-        :median => median,
-      }
-    end
+    deck = Estim8.Deck.list()[state.settings.deck_id]
+    deck.calculate_stats.(non_empty_estimates)
   end
 
   def reveal(room) do
@@ -121,10 +99,7 @@ defmodule Estim8.Room do
       |> Map.update!(:stage, fn (_) -> :estimation end)
       |> Map.update!(:users, fn (users) -> Enum.reduce(users, %{}, fn ({user_id, user}, acc) -> Map.put(acc, user_id, Estim8.User.update_card(user, nil)) end) end)
       |> Map.update!(:num_non_empty_estimations, fn (_) -> 0 end)
-      |> Map.update!(:stats, fn (_) -> %{
-        :mean => nil,
-        :median => nil,
-      } end)
+      |> Map.update!(:stats, fn (_) -> [] end)
     end)
     broadcast(room)
   end

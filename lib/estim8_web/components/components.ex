@@ -168,7 +168,12 @@ defmodule Estim8Web.Components do
       <div class="flex flex-col items-center">
         <div><%= @name %></div>
         <div class="text-6xl">
-          <%= if @value != nil do @value else "-" end %>
+          <%= cond do
+            is_float(@value) -> Decimal.from_float(@value) |> Decimal.round(1)
+            is_integer(@value) -> Decimal.new(@value) |> Decimal.round(1)
+            is_nil(@value) -> "-"
+            true -> @value
+          end %>
         </div>
       </div>
     """
