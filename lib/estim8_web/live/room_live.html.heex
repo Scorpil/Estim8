@@ -33,7 +33,7 @@
 
       <!-- Table -->
       <div class="py-2 flex flex-row grow justify-center content-center flex-wrap">
-        <%= for {_, user} <- @users do %>
+        <%= for {_, user} <- Enum.reverse(@users) do %>
           <%= if user.card != nil do %>
             <%= if user.id == @me.id do %>
               <.own_card name={user.name} label={user.card.label} style={if @stage == :estimation, do: :hint, else: :show} />
@@ -57,7 +57,7 @@
         <%= if @stage == :results do %>
         <div class="flex flex-row grow justify-around py-2 absolute inset-x-0">
           <.stat name="Average" value={if @stats.mean != nil do :io_lib.format("~.1f", [@stats.mean]) else nil end} />
-          <.stat name="Median" value={@stats.median} />
+          <.stat name="Median" value={if @stats.median != nil do :io_lib.format("~.1f", [@stats.median]) else nil end} />
         </div>
         <% end %>
       </div>

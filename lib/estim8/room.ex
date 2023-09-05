@@ -1,3 +1,5 @@
+require Integer
+
 defmodule Estim8.RoomRegistry do
   use GenServer
 
@@ -90,7 +92,13 @@ defmodule Estim8.Room do
     else
 
       mean = Enum.sum(non_empty_estimates) / num_non_empty_estimates
-      median = Enum.at(non_empty_estimates, div(num_non_empty_estimates, 2))
+      median =
+      if Integer.is_odd(non_empty_estimates) do
+        Enum.at(non_empty_estimates, div(num_non_empty_estimates, 2))
+      else
+        (Enum.at(non_empty_estimates, div(num_non_empty_estimates, 2) - 1) +
+        Enum.at(non_empty_estimates, div(num_non_empty_estimates, 2))) / 2
+      end
       %{
         :mean => mean,
         :median => median,
