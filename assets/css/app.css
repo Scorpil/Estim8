@@ -4,9 +4,13 @@
 
 @import url('https://fonts.googleapis.com/css?family=Montserrat:500');
 
-body {
-    font-family: 'Montserrat', sans-serif;
-    min-height: 100vh;
+html {
+    display: flex;
     min-height: -webkit-fill-available;
+}
+
+body {
+    flex-grow: 1;
+    font-family: 'Montserrat', sans-serif;
 }
 /* This file is for your main application CSS */
