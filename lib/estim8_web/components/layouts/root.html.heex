@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
-    <.live_title suffix=" · Phoenix Framework">
+    <.live_title suffix=" · Estim8">
       <%= assigns[:page_title] || "Estim8" %>
     </.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
@@ -13,7 +13,9 @@
   </head>
   <body class="bg-afwhite h-screen antialiased">
     <div class="flex flex-col h-full mx-3">
-      <%= @inner_content %>
+      <div class="flex flex-col flex-grow">
+        <%= @inner_content %>
+      </div>
     </div>
     <script type='text/javascript'>
     var Countly = Countly || {};
