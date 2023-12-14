@@ -89,7 +89,7 @@ defmodule Estim8.Deck do
     %Estim8.Deck{
       n: 0,
       id: "scrum_fib",
-      name: "Modified Fibonacci: ?, 0, 1/2, 1, 2, 3, 4, 8, 13, 20, 40, 100",
+      name: "Modified Fibonacci: ?, 0, 1/2, 1, 2, 3, 5, 8, 13, 20, 40, 100",
       cards: [
         Estim8.Card.new("?", :unknown),
         Estim8.Card.new("0", 0),
