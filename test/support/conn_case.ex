@@ -32,7 +32,6 @@ defmodule Estim8Web.ConnCase do
   end
 
   setup tags do
-    Estim8.DataCase.setup_sandbox(tags)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 end

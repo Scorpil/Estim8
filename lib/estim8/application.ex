@@ -10,8 +10,6 @@ defmodule Estim8.Application do
     children = [
       # Start the Telemetry supervisor
       Estim8Web.Telemetry,
-      # Start the Ecto repository
-      # Estim8.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: Estim8.PubSub},
       # Start Finch
