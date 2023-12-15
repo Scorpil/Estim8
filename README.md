@@ -1,5 +1,11 @@
 # Estim8
 
+Estim8 is a simple, no-frills Scrum Poker application, built using Elixir's Phoenix LiveView.
+
+![UI screenshot](./screenshot.png)
+
+# Development
+
 To start your Phoenix server:
 
   * Run `mix setup` to install and setup dependencies
