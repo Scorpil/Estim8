@@ -3,10 +3,19 @@ defmodule Estim8.DeckUtilsTest do
 
   alias Estim8.DeckUtils
 
-  test "calculate_stats_default/1 for empty list of estimates" do
-    assert DeckUtils.calculate_stats_default([]) == [
-             %{title: "Average", value: nil},
-             %{title: "Median", value: nil}
-           ]
+  for {estimates, expected_avg, expected_median} <- [
+        {[], nil, nil},
+        {[1, 3, 1], (1 + 3 + 1) / 3, 1},
+        {[1, 1, 3], (1 + 1 + 3) / 3, 1},
+        {[1, 3, 2, 1], (1 + 3 + 2 + 1) / 4, (1 + 2) / 2},
+        {[1, 1, 2, 3], (1 + 1 + 2 + 3) / 4, (1 + 2) / 2}
+      ] do
+    test "calculate_stats_default/1 for estimates [" <>
+           Enum.map_join(estimates, ", ", &"#{&1}") <> "]" do
+      assert DeckUtils.calculate_stats_default(unquote(estimates)) == [
+               %{title: "Average", value: unquote(expected_avg)},
+               %{title: "Median", value: unquote(expected_median)}
+             ]
+    end
   end
 end
