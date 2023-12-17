@@ -57,7 +57,7 @@
         <%= if @stage == :results do %>
         <div class="flex flex-row grow justify-around py-2 absolute inset-x-0">
           <%= for stat <- @stats do %>
-            <.stat name={stat.title} value={stat.value}} />
+            <.stat name={stat.title} value={stat.value} />
           <% end %>
         </div>
         <% end %>
