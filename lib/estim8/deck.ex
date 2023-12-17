@@ -26,8 +26,9 @@ defmodule Estim8.DeckUtils do
       mean = Enum.sum(estimates) / num_estimates
       median =
         if Integer.is_odd(num_estimates) do
-          Enum.at(estimates, div(num_estimates, 2))
+          estimates |> Enum.sort() |> Enum.at(div(num_estimates, 2))
         else
+          estimates = Enum.sort(estimates)
           (Enum.at(estimates, div(num_estimates, 2) - 1) +
           Enum.at(estimates, div(num_estimates, 2))) / 2
         end
