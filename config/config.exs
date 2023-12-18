@@ -7,9 +7,6 @@
 # General application configuration
 import Config
 
-config :estim8,
-  ecto_repos: [Estim8.Repo]
-
 # Configures the endpoint
 config :estim8, Estim8Web.Endpoint,
   url: [host: "localhost"],

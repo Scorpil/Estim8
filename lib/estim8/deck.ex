@@ -9,39 +9,22 @@ defmodule Estim8.Card do
 end
 
 defmodule Estim8.DeckUtils do
+  def calculate_stats_default([]) do
+    to_named_stats(nil, nil)
+  end
+
   def calculate_stats_default(estimates) do
+    estimates = Enum.sort(estimates)
     num_estimates = Enum.count(estimates)
-    if num_estimates == 0 do
-      [
-        %{
-            :title => "Average",
-            :value => nil,
-        },
-        %{
-            :title => "Median",
-            :value => nil,
-        }
-      ]
-    else
-      mean = Enum.sum(estimates) / num_estimates
-      median =
-        if Integer.is_odd(num_estimates) do
-          Enum.at(estimates, div(num_estimates, 2))
-        else
-          (Enum.at(estimates, div(num_estimates, 2) - 1) +
-          Enum.at(estimates, div(num_estimates, 2))) / 2
-        end
-      [
-        %{
-            :title => "Average",
-            :value => mean,
-        },
-        %{
-            :title => "Median",
-            :value => median,
-        }
-      ]
-    end
+    mean = Enum.sum(estimates) / num_estimates
+    median =
+      if Integer.is_odd(num_estimates) do
+        Enum.at(estimates, div(num_estimates, 2))
+      else
+        (Enum.at(estimates, div(num_estimates, 2) - 1) +
+           Enum.at(estimates, div(num_estimates, 2))) / 2
+      end
+    to_named_stats(mean, median)
   end
 
   def calculate_stats_tshirt(estimates) do
@@ -65,16 +48,11 @@ defmodule Estim8.DeckUtils do
             "#{m1 |> to_label.()}/#{m2 |> to_label.()}"
           end
         end
-      [
-        %{
-          :title => "Average",
-          :value => Enum.at(cards, mean_index).label,
-        },
-        %{
-          :title => "Median",
-          :value => median,
-        }
-      ]
+      to_named_stats(Enum.at(cards, mean_index).label, median)
+  end
+
+  defp to_named_stats(mean, median) do
+    [%{:title => "Average", :value => mean}, %{:title => "Median", :value => median}]
   end
 end
 
